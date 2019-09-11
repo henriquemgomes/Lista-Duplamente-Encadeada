@@ -18,4 +18,85 @@ public class ListaDuplamenteEncadeada {
         // TODO code application logic here
     }
     
+    private Caixa primeiraCaixa;
+    private Pessoa fichaPessoa;
+    private Caixa segundaCaixa;
+    
+    public ListaDuplamenteEncadeada(Pessoa fichaPessoa){
+        primeiraCaixa = null;
+        this.fichaPessoa = fichaPessoa;
+        segundaCaixa = null;
+    }
+    
+    // Operações do Cursor
+    
+    //Henrique
+    private void vaParaPrimeiro(){
+        
+    }
+    
+    //Caroline
+    private void vaParaUltimo(){
+        
+    }
+    
+    //Henrique
+    private void avanca(int posicao){
+        
+    }
+    
+    //Caroline
+    private void retrocede(int posicao){
+        
+    }
+    
+    //Caroline
+    public boolean busca(int referencia){
+        return false;
+    }
+    
+    // Operações na lista
+    
+    //Henrique
+    public void insereNaFrente(){
+        
+    }
+    
+    //Caroline
+    public void insereNoFim(){
+        
+    }
+    
+    //Henrique
+    public void insereAposAtual(){
+        
+    }
+    
+    //Caroline
+    public void insereNaPosicao(int posicao){
+        
+    }
+    
+    //Henrique
+    public void excluiPrimeiro(){
+        
+    }
+    
+    //Caroline
+    public void excluiUltimo(){
+        
+    }
+    
+    //Henrique
+    public void excluiAtual(){
+        
+    }
+    
+    //Caroline
+    public void acessaAtual(){
+        
+    }
+    
+    
+    
 }
