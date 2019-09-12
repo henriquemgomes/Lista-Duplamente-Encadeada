@@ -26,10 +26,12 @@ public class ListaDuplamenteEncadeada {
         
     }
     
-    /*private Caixa primeiraCaixa;
-    private Pessoa fichaPessoa;
-    private Caixa segundaCaixa;*/
-    //acho q n precisa dessas ai, acho q da pra controlar melhor assim ó:
+    /*
+        private Caixa primeiraCaixa;
+        private Pessoa fichaPessoa;
+        private Caixa segundaCaixa;
+    */
+    // acho q n precisa dessas ai, acho q da pra controlar melhor assim ó:
     
     private Caixa cabeca;
     private Caixa cursor;
@@ -37,42 +39,50 @@ public class ListaDuplamenteEncadeada {
     
     
     public ListaDuplamenteEncadeada(Pessoa fichaPessoa){
-        cabeca = new Caixa(null, fichaPessoa, null);
-        cursor = cabeca;
-        ultima = cabeca;
+        this.cabeca = new Caixa(null, fichaPessoa, null);
+        this.cursor = this.cabeca;
+        this.ultima = this.cabeca;
     }
     
     // Operações do Cursor
     
     //Henrique
     private void vaParaPrimeiro(){
-        cursor = cabeca;
+        this.cursor = this.cabeca;
     }
     
     //Caroline
     private void vaParaUltimo(){
-        cursor = ultima;
+        this.cursor = this.ultima;
     }
     
     //Henrique
     private void avanca(int posicao){
         //caso a posicao seja maior q o numero de objetos restantes ele aponta para o ultimo.
         for(int i = 0; i <= posicao; i++){
-            if(cursor.getProximo() == null){
+            //acho que nunca vai ser null, pois this.cursor = this.cabeca;
+            if(this.cursor.getProximo() == null){
                 break;
             } else{
-                cursor = cursor.getProximo();
+                this.cursor = this.cursor.getProximo();
             }
         }
     }
     
     //Caroline
     private void retrocede(int posicao){
-        
+        for(int i = posicao; i <= posicao; i--){
+            this.cursor = this.cursor.getAnterior();
+        }
     }
     
     //Caroline
-    public boolean busca(int referencia){
+    public boolean busca(String nome){
+        while(this.cursor != null){
+            if(this.cursor.getProximo().getPessoa().getNome().equals(nome)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -80,9 +90,9 @@ public class ListaDuplamenteEncadeada {
     
     //Henrique
     public void insereNaFrente(Pessoa fichaPessoa){
-        Caixa nova = new Caixa(null, fichaPessoa, cabeca);
-        cabeca.setAnterior(nova);
-        cabeca = nova;
+        Caixa nova = new Caixa(null, fichaPessoa, this.cabeca);
+        this.cabeca.setAnterior(nova);
+        this.cabeca = nova;
     }
     
     //Caroline
@@ -123,11 +133,11 @@ public class ListaDuplamenteEncadeada {
     //apenas para testes
     public void imprimeLista(){
         vaParaPrimeiro();
-        while(cursor.getProximo() != null){
-            System.out.print(cursor.getPessoa().getNome()+", ");
-            cursor = cursor.getProximo();
+        while(this.cursor.getProximo() != null){
+            System.out.print(this.cursor.getPessoa().getNome()+", ");
+            this.cursor = this.cursor.getProximo();
         }
-        System.out.println(cursor.getPessoa().getNome());
+        System.out.println(this.cursor.getPessoa().getNome());
 
     }
     
