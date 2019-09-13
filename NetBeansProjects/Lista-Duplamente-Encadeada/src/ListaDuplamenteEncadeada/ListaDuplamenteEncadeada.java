@@ -15,23 +15,35 @@ public class ListaDuplamenteEncadeada {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada(new Pessoa(1, "Carlos", 20, 88993322l));
-        lista.insereNaFrente(new Pessoa(2, "Jeska", 22, 99856288l));
-        lista.insereNaFrente(new Pessoa(2, "Gustavo", 22, 99875428l));
+        // Ficha de pessoas:
+        Pessoa pessoa1 = new Pessoa(1, "Carlos", 20, 88993322l);
+        Pessoa pessoa2 = new Pessoa(2, "Jeska", 22, 99856288l);
+        Pessoa pessoa3 = new Pessoa(3, "Gustavo", 22, 99875428l);
+        Pessoa pessoa4 = new Pessoa(4, "Paulão", 23, 999568412l);
+        Pessoa pessoa5 = new Pessoa(5, "Creusa", 23, 988245677l);
+        
+        // Criando a lista:
+        ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada(pessoa1);
+        
+        // Inserindo na lista:
+        lista.insereNaFrente(pessoa2);
+        lista.insereNaFrente(pessoa3);
+        lista.insereNoFim(pessoa4);
+        lista.insereNaPosicao(2, pessoa5);
+        lista.excluiUltimo();
         lista.imprimeLista();
+        
+        // Operações do cursor:
         lista.vaParaPrimeiro();
         System.out.println(lista.getCursor().getPessoa().getNome());
-        lista.avanca(3);
+        lista.avanca(2);
+        System.out.println(lista.getCursor().getPessoa().getNome());
+        lista.retrocede(1);
         System.out.println(lista.getCursor().getPessoa().getNome());
         
+        System.out.println(lista.busca(8));
+        
     }
-    
-    /*
-        private Caixa primeiraCaixa;
-        private Pessoa fichaPessoa;
-        private Caixa segundaCaixa;
-    */
-    // acho q n precisa dessas ai, acho q da pra controlar melhor assim ó:
     
     private Caixa cabeca;
     private Caixa cursor;
@@ -59,8 +71,8 @@ public class ListaDuplamenteEncadeada {
     //Henrique
     private void avanca(int posicao){
         //caso a posicao seja maior q o numero de objetos restantes ele aponta para o ultimo.
-        for(int i = 0; i <= posicao; i++){
-            //acho que nunca vai ser null, pois this.cursor = this.cabeca;
+        // Ei, eu tirei o <= e deixei só o < porque deslocava uma posição a mais. Carol aqui rs
+        for(int i = 0; i < posicao; i++){
             if(this.cursor.getProximo() == null){
                 break;
             } else{
@@ -71,17 +83,24 @@ public class ListaDuplamenteEncadeada {
     
     //Caroline
     private void retrocede(int posicao){
-        for(int i = posicao; i <= posicao; i--){
-            this.cursor = this.cursor.getAnterior();
+        for(int i = 0; i < posicao; i++){
+            if(this.cursor.getAnterior() == null){
+                break;
+            }else{
+                this.cursor = this.cursor.getAnterior();
+            }
         }
+        
     }
     
     //Caroline
-    public boolean busca(String nome){
-        while(this.cursor != null){
-            if(this.cursor.getProximo().getPessoa().getNome().equals(nome)){
+    public boolean busca(int id){
+        vaParaPrimeiro();
+        while(this.cursor.getProximo() != null){
+            if(this.cursor.getProximo().getPessoa().getId() == id){
                 return true;
             }
+            this.cursor = this.cursor.getProximo();
         }
         return false;
     }
@@ -96,8 +115,10 @@ public class ListaDuplamenteEncadeada {
     }
     
     //Caroline
-    public void insereNoFim(){
-        
+    public void insereNoFim(Pessoa fichaPessoa){
+        Caixa novaCaixa = new Caixa(this.ultima, fichaPessoa, null);
+        this.ultima.setProximo(novaCaixa);
+        this.ultima = novaCaixa;
     }
     
     //Henrique
@@ -106,8 +127,18 @@ public class ListaDuplamenteEncadeada {
     }
     
     //Caroline
-    public void insereNaPosicao(int posicao){
-        
+    public void insereNaPosicao(int posicao, Pessoa fichaPessoa){
+        vaParaPrimeiro();
+        avanca(posicao);
+        Caixa ultimo = this.cursor.getProximo();
+        // Validar como pode ser feito, se chegar ao final volta ou o quê
+        if(ultimo != null){
+            Caixa primeiro = this.cursor;
+            Caixa novaCaixa = new Caixa(primeiro, fichaPessoa, ultimo);
+            primeiro.setProximo(novaCaixa);
+            ultimo.setAnterior(novaCaixa);            
+        }
+
     }
     
     //Henrique
@@ -117,7 +148,8 @@ public class ListaDuplamenteEncadeada {
     
     //Caroline
     public void excluiUltimo(){
-        
+        vaParaUltimo();
+        this.cursor.getAnterior().setProximo(null);
     }
     
     //Henrique
@@ -126,8 +158,8 @@ public class ListaDuplamenteEncadeada {
     }
     
     //Caroline
-    public void acessaAtual(){
-        
+    public Caixa acessaAtual(){
+        return this.cursor;
     }
     
     //apenas para testes
@@ -141,6 +173,7 @@ public class ListaDuplamenteEncadeada {
 
     }
     
+    // Acho que não precisa porque já tem o acessaAtual()
     //apenas para testes
     public Caixa getCursor(){
         return this.cursor;
