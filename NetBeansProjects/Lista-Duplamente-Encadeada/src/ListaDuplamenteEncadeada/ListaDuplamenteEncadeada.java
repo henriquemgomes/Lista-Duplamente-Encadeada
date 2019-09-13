@@ -29,7 +29,7 @@ public class ListaDuplamenteEncadeada {
         lista.insereNaFrente(pessoa2);
         lista.insereNaFrente(pessoa3);
         lista.insereNoFim(pessoa4);
-        lista.insereNaPosicao(2, pessoa5);
+        lista.insereNaPosicao(9, pessoa5);
         lista.excluiUltimo();
         lista.imprimeLista();
         
@@ -132,7 +132,9 @@ public class ListaDuplamenteEncadeada {
         avanca(posicao);
         Caixa ultimo = this.cursor.getProximo();
         // Validar como pode ser feito, se chegar ao final volta ou o quê
-        if(ultimo != null){
+        if(ultimo == null){
+            insereNoFim(fichaPessoa);
+        }else{
             Caixa primeiro = this.cursor;
             Caixa novaCaixa = new Caixa(primeiro, fichaPessoa, ultimo);
             primeiro.setProximo(novaCaixa);
@@ -148,6 +150,7 @@ public class ListaDuplamenteEncadeada {
     
     //Caroline
     public void excluiUltimo(){
+        //Para onde vai o cursor do ultimo
         vaParaUltimo();
         this.cursor.getAnterior().setProximo(null);
     }
