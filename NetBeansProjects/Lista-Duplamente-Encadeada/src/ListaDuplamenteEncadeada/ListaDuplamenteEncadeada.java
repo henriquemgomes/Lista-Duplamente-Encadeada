@@ -22,6 +22,7 @@ public class ListaDuplamenteEncadeada {
         Pessoa pessoa4 = new Pessoa(4, "Paulão", 23, 999568412l);
         Pessoa pessoa5 = new Pessoa(5, "Creusa", 23, 988245677l);
         Pessoa pessoa6 = new Pessoa(6, "Amaro", 33, 981054711l);
+        Pessoa pessoa7 = new Pessoa(7, "Michel", 33, 973124432l);
 
         // Criando a lista:
         ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada(pessoa1);
@@ -32,8 +33,15 @@ public class ListaDuplamenteEncadeada {
         lista.inserirNoFim(pessoa4);
         lista.inserirNaPosicao(3, pessoa5);
         lista.inserirAntesDoAtual(pessoa6);
+        lista.avancarKPosicoes(2);
+        lista.inserirAposAtual(pessoa7);
+        lista.avancarKPosicoes(2); 
+        lista.excluirAtual();
         //lista.excluirUltimo();
+        lista.excluirPrimeiro();
         lista.imprimirLista();
+        System.out.println("Atual: " + lista.acessarAtual().getPessoa().getNome()); 
+        
 
         // Operações do cursor:
         lista.irParaPrimeiro();
@@ -42,6 +50,7 @@ public class ListaDuplamenteEncadeada {
         System.out.println("Avançar (5): " + lista.acessarAtual().getPessoa().getNome());
         lista.retrocederKPosicoes(4);
         System.out.println("Retroceder (4): " + lista.acessarAtual().getPessoa().getNome());
+        
 
         System.out.println(lista.buscar(6));
 
@@ -75,7 +84,16 @@ public class ListaDuplamenteEncadeada {
 
     //Henrique
     public void inserirAposAtual(Pessoa fichaPessoa) {
-
+        Caixa atual = acessarAtual();
+        Caixa proximoAtual = atual.getProximo();
+        if (proximoAtual == null) {
+            inserirNoFim(fichaPessoa);
+        }else {
+            Caixa novaCaixa = new Caixa(atual, fichaPessoa, proximoAtual);
+            atual.setProximo(novaCaixa);
+            proximoAtual.setAnterior(novaCaixa);
+            this.cursor = novaCaixa;
+        }        
     }
 
     //Caroline
@@ -115,12 +133,31 @@ public class ListaDuplamenteEncadeada {
 
     //Henrique
     public void excluirAtual() {
+        
+        Caixa atual = acessarAtual();
+        if(atual.getAnterior() != null){
+            Caixa anteriorAtual = atual.getAnterior();
+            Caixa proximoAtual = atual.getProximo();
 
+            anteriorAtual.setProximo(proximoAtual);
+            proximoAtual.setAnterior(anteriorAtual);
+            cursor = anteriorAtual;
+            atual.setAnterior(null);
+            atual.setProximo(null);
+        } else{
+            excluirPrimeiro();
+        }
+        
     }
 
     //Henrique
     public void excluirPrimeiro() {
-
+       Caixa primeiro = cabeca;
+       Caixa novoPrimeiro = cabeca.getProximo();
+       primeiro.setProximo(null);
+       novoPrimeiro.setAnterior(null);
+       cabeca = novoPrimeiro;
+       cursor = cabeca;
     }
 
     //Caroline
@@ -185,12 +222,12 @@ public class ListaDuplamenteEncadeada {
     //Henrique
     //Imprimir os elementos da lista 
     public void imprimirLista() {
-        irParaPrimeiro();
-        while (this.cursor.getProximo() != null) {
-            System.out.print(this.cursor.getPessoa().getNome() + ", ");
-            this.cursor = this.cursor.getProximo();
+        Caixa cursorImpressao = cabeca;
+        while (cursorImpressao.getProximo() != null) {
+            System.out.print(cursorImpressao.getPessoa().getNome() + ", ");
+            cursorImpressao = cursorImpressao.getProximo();
         }
-        System.out.println(this.cursor.getPessoa().getNome());
+        System.out.println(cursorImpressao.getPessoa().getNome());
 
     }
 
