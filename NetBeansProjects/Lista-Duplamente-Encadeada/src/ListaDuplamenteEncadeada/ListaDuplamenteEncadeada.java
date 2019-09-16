@@ -21,167 +21,177 @@ public class ListaDuplamenteEncadeada {
         Pessoa pessoa3 = new Pessoa(3, "Gustavo", 22, 99875428l);
         Pessoa pessoa4 = new Pessoa(4, "Paulão", 23, 999568412l);
         Pessoa pessoa5 = new Pessoa(5, "Creusa", 23, 988245677l);
-        
+        Pessoa pessoa6 = new Pessoa(6, "Amaro", 33, 981054711l);
+
         // Criando a lista:
         ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada(pessoa1);
-        
+
         // Inserindo na lista:
-        lista.insereNaFrente(pessoa2);
-        lista.insereNaFrente(pessoa3);
-        lista.insereNoFim(pessoa4);
-        lista.insereNaPosicao(9, pessoa5);
-        lista.excluiUltimo();
-        lista.imprimeLista();
-        
+        lista.inserirNaFrente(pessoa2);
+        lista.inserirNaFrente(pessoa3);
+        lista.inserirNoFim(pessoa4);
+        lista.inserirNaPosicao(3, pessoa5);
+        lista.inserirAntesDoAtual(pessoa6);
+        //lista.excluirUltimo();
+        lista.imprimirLista();
+
         // Operações do cursor:
-        lista.vaParaPrimeiro();
-        System.out.println(lista.getCursor().getPessoa().getNome());
-        lista.avanca(2);
-        System.out.println(lista.getCursor().getPessoa().getNome());
-        lista.retrocede(1);
-        System.out.println(lista.getCursor().getPessoa().getNome());
-        
-        System.out.println(lista.busca(8));
-        
+        lista.irParaPrimeiro();
+        System.out.println("Ir Para Primeiro: " + lista.acessarAtual().getPessoa().getNome());
+        lista.avancarKPosicoes(5);
+        System.out.println("Avançar (5): " + lista.acessarAtual().getPessoa().getNome());
+        lista.retrocederKPosicoes(4);
+        System.out.println("Retroceder (4): " + lista.acessarAtual().getPessoa().getNome());
+
+        System.out.println(lista.buscar(6));
+
     }
-    
+
     private Caixa cabeca;
     private Caixa cursor;
     private Caixa ultima;
-    
-    
-    public ListaDuplamenteEncadeada(Pessoa fichaPessoa){
+
+    public ListaDuplamenteEncadeada(Pessoa fichaPessoa) {
         this.cabeca = new Caixa(null, fichaPessoa, null);
         this.cursor = this.cabeca;
         this.ultima = this.cabeca;
     }
-    
-    // Operações do Cursor
-    
-    //Henrique
-    private void vaParaPrimeiro(){
-        this.cursor = this.cabeca;
-    }
+
+    //Operações da lista (públicas)
     
     //Caroline
-    private void vaParaUltimo(){
+    public void inserirAntesDoAtual(Pessoa fichaPessoa) {
+        Caixa atual = acessarAtual();
+        Caixa anteriorAtual = atual.getAnterior();
+        if (anteriorAtual == null) {
+            inserirNaFrente(fichaPessoa);
+        } else {
+            Caixa novaCaixa = new Caixa(anteriorAtual, fichaPessoa, atual);
+            atual.setAnterior(novaCaixa);
+            anteriorAtual.setProximo(novaCaixa);
+            this.cursor = novaCaixa;
+        }
+    }
+
+    //Henrique
+    public void inserirAposAtual(Pessoa fichaPessoa) {
+
+    }
+
+    //Caroline
+    public void inserirNoFim(Pessoa fichaPessoa) {
+        Caixa novaCaixa = new Caixa(this.ultima, fichaPessoa, null);
+        this.ultima.setProximo(novaCaixa);
+        this.ultima = novaCaixa;
         this.cursor = this.ultima;
     }
-    
+
     //Henrique
-    private void avanca(int posicao){
-        //caso a posicao seja maior q o numero de objetos restantes ele aponta para o ultimo.
-        // Ei, eu tirei o <= e deixei só o < porque deslocava uma posição a mais. Carol aqui rs
-        for(int i = 0; i < posicao; i++){
-            if(this.cursor.getProximo() == null){
-                break;
-            } else{
-                this.cursor = this.cursor.getProximo();
-            }
+    public void inserirNaFrente(Pessoa fichaPessoa) {
+        Caixa nova = new Caixa(null, fichaPessoa, this.cabeca);
+        this.cabeca.setAnterior(nova);
+        this.cabeca = nova;
+    }
+
+    //Caroline
+    public void inserirNaPosicao(int posicao, Pessoa fichaPessoa) {
+        irParaPrimeiro();
+        avancarKPosicoes(posicao);
+        if (this.cursor.getProximo() == null) {
+            inserirNoFim(fichaPessoa);
+        } else if (posicao == 1) {
+            inserirNaFrente(fichaPessoa);
+        } else {
+            Caixa novaCaixa = new Caixa(this.cursor, fichaPessoa, this.cursor.getProximo());
+            Caixa atual = this.cursor;
+            Caixa anterior = this.cursor.getAnterior();
+            anterior.setProximo(novaCaixa);
+            atual.setAnterior(novaCaixa);
+            novaCaixa.setProximo(atual);
+            novaCaixa.setAnterior(anterior);
+            this.cursor = novaCaixa;
         }
     }
-    
-    //Caroline
-    private void retrocede(int posicao){
-        for(int i = 0; i < posicao; i++){
-            if(this.cursor.getAnterior() == null){
-                break;
-            }else{
-                this.cursor = this.cursor.getAnterior();
-            }
-        }
-        
+
+    //Henrique
+    public void excluirAtual() {
+
     }
-    
+
+    //Henrique
+    public void excluirPrimeiro() {
+
+    }
+
     //Caroline
-    public boolean busca(int id){
-        vaParaPrimeiro();
-        while(this.cursor.getProximo() != null){
-            if(this.cursor.getProximo().getPessoa().getId() == id){
+    public void excluirUltimo() {
+        //Para onde vai o cursor do ultimo
+        irParaUltimo();
+        this.cursor.getAnterior().setProximo(null);
+        this.cursor = this.cursor.getAnterior();
+    }
+
+    //Caroline
+    public boolean buscar(int id) {
+        irParaPrimeiro();
+        while (this.cursor.getProximo() != null) {
+            if (this.cursor.getProximo().getPessoa().getId() == id) {
                 return true;
             }
             this.cursor = this.cursor.getProximo();
         }
         return false;
     }
-    
-    // Operações na lista
-    
-    //Henrique
-    public void insereNaFrente(Pessoa fichaPessoa){
-        Caixa nova = new Caixa(null, fichaPessoa, this.cabeca);
-        this.cabeca.setAnterior(nova);
-        this.cabeca = nova;
-    }
-    
-    //Caroline
-    public void insereNoFim(Pessoa fichaPessoa){
-        Caixa novaCaixa = new Caixa(this.ultima, fichaPessoa, null);
-        this.ultima.setProximo(novaCaixa);
-        this.ultima = novaCaixa;
-    }
-    
-    //Henrique
-    public void insereAposAtual(){
-        
-    }
-    
-    //Caroline
-    public void insereNaPosicao(int posicao, Pessoa fichaPessoa){
-        vaParaPrimeiro();
-        avanca(posicao);
-        Caixa ultimo = this.cursor.getProximo();
-        // Validar como pode ser feito, se chegar ao final volta ou o quê
-        if(ultimo == null){
-            insereNoFim(fichaPessoa);
-        }else{
-            Caixa primeiro = this.cursor;
-            Caixa novaCaixa = new Caixa(primeiro, fichaPessoa, ultimo);
-            primeiro.setProximo(novaCaixa);
-            ultimo.setAnterior(novaCaixa);            
-        }
 
-    }
-    
-    //Henrique
-    public void excluiPrimeiro(){
-        
-    }
-    
     //Caroline
-    public void excluiUltimo(){
-        //Para onde vai o cursor do ultimo
-        vaParaUltimo();
-        this.cursor.getAnterior().setProximo(null);
-    }
-    
-    //Henrique
-    public void excluiAtual(){
-        
-    }
-    
-    //Caroline
-    public Caixa acessaAtual(){
+    public Caixa acessarAtual() {
         return this.cursor;
     }
-    
-    //apenas para testes
-    public void imprimeLista(){
-        vaParaPrimeiro();
-        while(this.cursor.getProximo() != null){
-            System.out.print(this.cursor.getPessoa().getNome()+", ");
+
+    // Operações do Cursor (privadas)
+    //Henrique
+    private void avancarKPosicoes(int k) {
+        //caso a posicao seja maior q o numero de objetos restantes ele aponta para o ultimo.
+        for (int i = 1; i < k; i++) {
+            if (this.cursor.getProximo() == null) {
+                break;
+            } else {
+                this.cursor = this.cursor.getProximo();
+            }
+        }
+    }
+
+    //Caroline
+    private void retrocederKPosicoes(int k) {
+        for (int i = 1; i < k; i++) {
+            if (this.cursor.getAnterior() == null) {
+                break;
+            } else {
+                this.cursor = this.cursor.getAnterior();
+            }
+        }
+    }
+
+    //Henrique
+    private void irParaPrimeiro() {
+        this.cursor = this.cabeca;
+    }
+
+    //Caroline
+    private void irParaUltimo() {
+        this.cursor = this.ultima;
+    }
+
+    //Henrique
+    //Imprimir os elementos da lista 
+    public void imprimirLista() {
+        irParaPrimeiro();
+        while (this.cursor.getProximo() != null) {
+            System.out.print(this.cursor.getPessoa().getNome() + ", ");
             this.cursor = this.cursor.getProximo();
         }
         System.out.println(this.cursor.getPessoa().getNome());
 
     }
-    
-    // Acho que não precisa porque já tem o acessaAtual()
-    //apenas para testes
-    public Caixa getCursor(){
-        return this.cursor;
-    }
-    
-    
-    
+
 }
