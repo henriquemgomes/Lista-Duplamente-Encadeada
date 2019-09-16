@@ -37,22 +37,15 @@ public class ListaDuplamenteEncadeada {
         lista.inserirAposAtual(pessoa7);
         lista.avancarKPosicoes(2); 
         lista.excluirAtual();
-        //lista.excluirUltimo();
+        lista.excluirUltimo();
         lista.excluirPrimeiro();
         lista.imprimirLista();
-        System.out.println("Atual: " + lista.acessarAtual().getPessoa().getNome()); 
-        
 
         // Operações do cursor:
         lista.irParaPrimeiro();
-        System.out.println("Ir Para Primeiro: " + lista.acessarAtual().getPessoa().getNome());
         lista.avancarKPosicoes(5);
-        System.out.println("Avançar (5): " + lista.acessarAtual().getPessoa().getNome());
         lista.retrocederKPosicoes(4);
-        System.out.println("Retroceder (4): " + lista.acessarAtual().getPessoa().getNome());
-        
-
-        System.out.println(lista.buscar(6));
+        lista.buscar(6);
 
     }
 
@@ -68,7 +61,6 @@ public class ListaDuplamenteEncadeada {
 
     //Operações da lista (públicas)
     
-    //Caroline
     public void inserirAntesDoAtual(Pessoa fichaPessoa) {
         Caixa atual = acessarAtual();
         Caixa anteriorAtual = atual.getAnterior();
@@ -82,7 +74,6 @@ public class ListaDuplamenteEncadeada {
         }
     }
 
-    //Henrique
     public void inserirAposAtual(Pessoa fichaPessoa) {
         Caixa atual = acessarAtual();
         Caixa proximoAtual = atual.getProximo();
@@ -96,7 +87,6 @@ public class ListaDuplamenteEncadeada {
         }        
     }
 
-    //Caroline
     public void inserirNoFim(Pessoa fichaPessoa) {
         Caixa novaCaixa = new Caixa(this.ultima, fichaPessoa, null);
         this.ultima.setProximo(novaCaixa);
@@ -104,14 +94,12 @@ public class ListaDuplamenteEncadeada {
         this.cursor = this.ultima;
     }
 
-    //Henrique
     public void inserirNaFrente(Pessoa fichaPessoa) {
         Caixa nova = new Caixa(null, fichaPessoa, this.cabeca);
         this.cabeca.setAnterior(nova);
         this.cabeca = nova;
     }
 
-    //Caroline
     public void inserirNaPosicao(int posicao, Pessoa fichaPessoa) {
         irParaPrimeiro();
         avancarKPosicoes(posicao);
@@ -131,9 +119,7 @@ public class ListaDuplamenteEncadeada {
         }
     }
 
-    //Henrique
     public void excluirAtual() {
-        
         Caixa atual = acessarAtual();
         if(atual.getAnterior() != null){
             Caixa anteriorAtual = atual.getAnterior();
@@ -141,7 +127,7 @@ public class ListaDuplamenteEncadeada {
 
             anteriorAtual.setProximo(proximoAtual);
             proximoAtual.setAnterior(anteriorAtual);
-            cursor = anteriorAtual;
+            this.cursor = anteriorAtual;
             atual.setAnterior(null);
             atual.setProximo(null);
         } else{
@@ -150,25 +136,21 @@ public class ListaDuplamenteEncadeada {
         
     }
 
-    //Henrique
     public void excluirPrimeiro() {
-       Caixa primeiro = cabeca;
-       Caixa novoPrimeiro = cabeca.getProximo();
+       Caixa primeiro = this.cabeca;
+       Caixa novoPrimeiro = this.cabeca.getProximo();
        primeiro.setProximo(null);
        novoPrimeiro.setAnterior(null);
-       cabeca = novoPrimeiro;
-       cursor = cabeca;
+       this.cabeca = novoPrimeiro;
+       this.cursor = this.cabeca;
     }
 
-    //Caroline
     public void excluirUltimo() {
-        //Para onde vai o cursor do ultimo
         irParaUltimo();
         this.cursor.getAnterior().setProximo(null);
         this.cursor = this.cursor.getAnterior();
     }
 
-    //Caroline
     public boolean buscar(int id) {
         irParaPrimeiro();
         while (this.cursor.getProximo() != null) {
@@ -180,13 +162,10 @@ public class ListaDuplamenteEncadeada {
         return false;
     }
 
-    //Caroline
     public Caixa acessarAtual() {
         return this.cursor;
     }
 
-    // Operações do Cursor (privadas)
-    //Henrique
     private void avancarKPosicoes(int k) {
         //caso a posicao seja maior q o numero de objetos restantes ele aponta para o ultimo.
         for (int i = 1; i < k; i++) {
@@ -198,7 +177,6 @@ public class ListaDuplamenteEncadeada {
         }
     }
 
-    //Caroline
     private void retrocederKPosicoes(int k) {
         for (int i = 1; i < k; i++) {
             if (this.cursor.getAnterior() == null) {
@@ -209,18 +187,14 @@ public class ListaDuplamenteEncadeada {
         }
     }
 
-    //Henrique
     private void irParaPrimeiro() {
         this.cursor = this.cabeca;
     }
 
-    //Caroline
     private void irParaUltimo() {
         this.cursor = this.ultima;
     }
 
-    //Henrique
-    //Imprimir os elementos da lista 
     public void imprimirLista() {
         Caixa cursorImpressao = cabeca;
         while (cursorImpressao.getProximo() != null) {
